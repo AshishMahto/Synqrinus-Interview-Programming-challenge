@@ -1,7 +1,10 @@
 import scala.collection.immutable.SortedMap
+import scala.util.Random
 
 class Coins {
 
+  /** Use a method to generate the value, so when we override
+    * we may use `super.gen_coin_names` */
   def gen_coin_names: SortedMap[Int, String] = SortedMap(
     1 -> "penny",
     5 -> "nickel",
@@ -11,8 +14,7 @@ class Coins {
     200 -> "toonie"
   )
 
-  /** lazy so we may override it */
-  lazy val coin_names: SortedMap[Int, String] = gen_coin_names
+  val coin_names: SortedMap[Int, String] = gen_coin_names
 
   /**
     * Compute the minimum number and types of coins we need.
@@ -31,8 +33,8 @@ class Coins {
       *
       * We know that this algorithm will produce the minimum total coins because of the way that
       * most of the canadian coins denominations divide the next denomination,
-      * and for the special case of the dime, we can create 30 cents by using a quarter and a nickel
-      * instead of 3 dimes.
+      * and for the special case of the dime, we can create 30 cents efficiently
+      * by using a quarter and a nickel instead of 3 dimes.
       *
       * @param rem_coins The coins that we haven't yet attempted to use.
       *                  Starts off as the entire list of coins, sorted from largest to smallest,
@@ -45,12 +47,14 @@ class Coins {
         val new_amt = rem_amt % value
         loop(rest_coins, new_amt) + (value -> num_coins)
     }
+    // We could make the above function tail recursive, by passing the map as a parameter,
+    // but the map will only have size 6, so it's not at all necessary.
+
     loop(coin_names.keys.toList.reverse, amt)
   }
 
 
-
-  /** Prints a nice, fully worded sentence containing the answer produced by [[Coins#calc_coins]]. */
+  /** Prints a nice, formatted block containing the answer produced by [[Coins#calc_coins calc_coins]]. */
   def pretty_print_coins(amt: Int): Unit = {
     def pluralize(str: String, nat: Int): String =
       if (nat == 1) str
@@ -76,8 +80,8 @@ object BonusCoins extends Coins {
 
   /**
     * The general idea with this is to use the greedy algorithm for the subset of coins that we know it works for.
-    * Since this is the case for canadian coins, we can extend our previous algorithm
-    * by trying all possible numbers of the 53-cent coin, and then using the previous algorithm for the remaining amount,
+    * Since this is the case for canadian coins, we can extend our previous algorithm by
+    * trying all possible numbers of the 53-cent coin, and then using the previous algorithm for the remaining amount,
     * and finding the best combination of them all.
     * <br>
     * The algorithm has linear efficiency w.r.t. the amount.
@@ -95,19 +99,19 @@ object BonusCoins extends Coins {
 
 
 
-object TestCoins extends App {
-
-  // Change this boolean to switch between the normal and the bonus questions.
-  val CoinObj: Coins = if (false) Coins else BonusCoins
-
+class TestCoins(CoinObj: Coins) {
   import CoinObj.pretty_print_coins
 
-  println("653: ")
-  pretty_print_coins(653)
+  val examples: List[Int] = List(653, 63, 132)
 
-  println("63: ")
-  pretty_print_coins(63)
+  for (ex <- examples) {
+    println(s"$ex: ")
+    pretty_print_coins(ex)
+  }
 
-  println("132: ")
-  pretty_print_coins(132)
+  def generate(): Unit = {
+    val ex = Random.nextInt(9999) + 1
+    println(s"$ex: ")
+    pretty_print_coins(ex)
+  }
 }
