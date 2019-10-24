@@ -67,8 +67,8 @@ class Coins {
       (value, name) <- coin_names
       num_coins = ans(value) if num_coins != 0
     }
-      println(num_coins + " " + pluralize(name, num_coins))
-    println(ans.valuesIterator.sum + " total coins\n")
+      println(s"$num_coins ${pluralize(name, num_coins)}")
+    println(s"${ans.valuesIterator.sum} total coins\n")
   }
 }
 
