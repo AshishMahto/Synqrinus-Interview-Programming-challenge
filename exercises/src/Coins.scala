@@ -69,6 +69,7 @@ class Coins {
     }
       println(s"$num_coins ${pluralize(name, num_coins)}")
     println(s"${ans.valuesIterator.sum} total coins\n")
+
   }
 }
 
