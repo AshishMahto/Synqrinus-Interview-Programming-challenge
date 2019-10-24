@@ -8,9 +8,11 @@ But, if that's unviable, one may instead use the commands to compile and run the
 ```bash
 cd path_to_repo\exercises\src
 scalac *.scala
-scala Interact.scala
+scala Interact
 ```
+<br></br>
 
+Feel free to check out the `minimal` branch as well, where you can find a single file containing all the solutions and no comments, error checking, or looped user input interaction. Use `scala Coins`, `scala BonusCoins` or `scala Trees` to run the different solutions after compiling. 
 
 </br></br>
 
